@@ -1,0 +1,49 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
+{
+	"name": "isaac_ros_vslam_dev",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "isaac-vslam",
+	"features": {},
+
+	"workspaceMount": "source=${localWorkspaceFolder}/../../,target=/workspaces/,type=bind",
+	"workspaceFolder": "/workspaces/src/isaac_ros_visual_slam",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"llvm-vs-code-extensions.vscode-clangd"
+			]
+		}
+	},
+
+  "runArgs": [
+		"--name", "isaac_vslam_dev",
+    "--cap-add=NET_ADMIN",
+    "--privileged",
+    "--user=root",
+    "--gpus=all",
+    "--mount", "type=bind,source=/home/mikexyl/workspaces/datasets,target=/datasets",
+    "-v", "/dev:/dev",
+    "--device-cgroup-rule", "c 81:* rmw",
+    "--device-cgroup-rule", "c 189:* rmw",
+    "-e", "DISPLAY=${DISPLAY}",
+    "-e", "QT_X11_NO_MITSHM=1",
+    "-e", "QT_QPA_PLATFORM=xcb",
+    "-v", "/tmp/.X11-unix:/tmp/.X11-unix"
+  ],
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "uname -a",
+
+	// Configure tool-specific properties.
+	// "customizations": {},
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}
