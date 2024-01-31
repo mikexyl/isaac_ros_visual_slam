@@ -27,7 +27,7 @@
     "--privileged",
     "--user=root",
     "--gpus=all",
-    "--mount", "type=bind,source=/home/mikexyl/workspaces/datasets,target=/datasets",
+    "--mount", "type=bind,source=${localEnv:HOME}/workspaces/datasets,target=/datasets",
     "-v", "/dev:/dev",
     "--device-cgroup-rule", "c 81:* rmw",
     "--device-cgroup-rule", "c 189:* rmw",
@@ -44,7 +44,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "apt remove -y ros-humble-isaac-ros-visual-slam && cd /workspaces && source /opt/ros/humble/setup.bash && colcon build"
+	"postCreateCommand": "apt remove -y ros-humble-isaac-ros-visual-slam && cd /workspaces && source /opt/ros/humble/setup.bash && colcon build --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=1"
 
 	// Configure tool-specific properties.
 	// "customizations": {},

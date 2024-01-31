@@ -21,18 +21,31 @@ from launch_ros.descriptions import ComposableNode
 from launch.substitutions import LaunchConfiguration
 from launch.actions import DeclareLaunchArgument, ExecuteProcess
 from launch.substitutions import EnvironmentVariable
-from launch.conditions import IfCondition
+from launch.conditions import IfCondition, UnlessCondition
 
 
 def generate_launch_description():
+    bag_file=DeclareLaunchArgument(
+        "bag_file",
+        default_value="/datasets/debug/isaac_vslam/office_short_d455",
+        description="Path to bag file",
+    )
+
     record_arg = DeclareLaunchArgument(
         "record",
         default_value="false",
         description="Enable recording of topics with rosbag",
     )
 
+    play_arg = DeclareLaunchArgument(
+        "play",
+        default_value="false",
+        description="Enable playing of topics with rosbag",
+    )
+
     """Launch file which brings up visual slam node configured for RealSense."""
     realsense_camera_node = Node(
+        condition=UnlessCondition(LaunchConfiguration('play')),
         name="camera",
         namespace="camera",
         package="realsense2_camera",
@@ -111,11 +124,34 @@ def generate_launch_description():
             "camera/infra2/image_rect_raw",
             "camera/infra2/camera_info",
             "camera/imu",
+            "/tf",
+            "/tf_static"
             # ... [add any other topics you wish to record]
         ],
         shell=True,
     )
 
+    play_rosbag = ExecuteProcess(
+        condition=IfCondition(LaunchConfiguration("play")),
+        cmd=[
+            "ros2",
+            "bag",
+            "play",
+            LaunchConfiguration("bag_file"),
+            "--clock",
+        ],       
+        shell=True,
+    )
+
+
     return launch.LaunchDescription(
-        [record_arg, visual_slam_launch_container, realsense_camera_node, record_rosbag]
+        [
+            bag_file,
+            record_arg,
+            play_arg,
+            visual_slam_launch_container,
+            realsense_camera_node,
+            record_rosbag,
+            play_rosbag
+        ]
     )
