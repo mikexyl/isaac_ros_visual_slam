@@ -1,0 +1,12 @@
+{
+  "python.languageServer": "Pylance",
+  "python.analysis.inlayHints.callArgumentNames": "all",
+  "python.analysis.inlayHints.functionReturnTypes": true,
+  "python.analysis.extraPaths": [
+    "/opt/ros/humble/lib/python3.8/site-packages"
+  ],
+  "[python]": {
+    "editor.formatOnType": true,
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+}

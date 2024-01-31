@@ -4,14 +4,19 @@
 	"name": "isaac_ros_vslam_dev",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"image": "isaac-vslam",
-	"features": {},
+	"features": {
+		// add llvm feature
+    "ghcr.io/devcontainers-community/features/llvm": {},
+		"ghcr.io/devcontainers/features/python:1": {}
+	},
 
-	"workspaceMount": "source=${localWorkspaceFolder}/../../,target=/workspaces/,type=bind",
+	"workspaceMount": "source=${localWorkspaceFolder}/../,target=/workspaces/src/,type=bind",
 	"workspaceFolder": "/workspaces/src/isaac_ros_visual_slam",
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"llvm-vs-code-extensions.vscode-clangd"
+				"llvm-vs-code-extensions.vscode-clangd",
+				"ms-python.black-formatter"
 			]
 		}
 	},
@@ -26,7 +31,7 @@
     "-v", "/dev:/dev",
     "--device-cgroup-rule", "c 81:* rmw",
     "--device-cgroup-rule", "c 189:* rmw",
-    "-e", "DISPLAY=${DISPLAY}",
+    "-e", "DISPLAY=${localEnv:DISPLAY}",
     "-e", "QT_X11_NO_MITSHM=1",
     "-e", "QT_QPA_PLATFORM=xcb",
     "-v", "/tmp/.X11-unix:/tmp/.X11-unix"
@@ -39,7 +44,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "uname -a",
+	"postCreateCommand": "apt remove -y ros-humble-isaac-ros-visual-slam && cd /workspaces && source /opt/ros/humble/setup.bash && colcon build"
 
 	// Configure tool-specific properties.
 	// "customizations": {},
