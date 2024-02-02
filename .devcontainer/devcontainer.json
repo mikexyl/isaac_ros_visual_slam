@@ -3,7 +3,7 @@
 {
 	"name": "isaac_ros_vslam_dev",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "isaac-vslam",
+	"dockerFile": "Dockerfile",
 	"features": {
 		// add llvm feature
     "ghcr.io/devcontainers-community/features/llvm": {},
@@ -31,11 +31,16 @@
     "-v", "/dev:/dev",
     "--device-cgroup-rule", "c 81:* rmw",
     "--device-cgroup-rule", "c 189:* rmw",
-    "-e", "DISPLAY=${localEnv:DISPLAY}",
-    "-e", "QT_X11_NO_MITSHM=1",
-    "-e", "QT_QPA_PLATFORM=xcb",
     "-v", "/tmp/.X11-unix:/tmp/.X11-unix"
   ],
+
+	"remoteEnv": {
+		"DISPLAY": "${localEnv:DISPLAY}",
+		"QT_X11_NO_MITSHM": "1",
+		"QT_QPA_PLATFORM": "xcb",
+		"CC": "/usr/bin/clang",
+		"CXX": "/usr/bin/clang++"
+	},
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
@@ -44,11 +49,11 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "apt remove -y ros-humble-isaac-ros-visual-slam && cd /workspaces && source /opt/ros/humble/setup.bash && colcon build --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=1"
+	// "postCreateCommand": "cd /workspaces && source /opt/ros/humble/setup.bash && colcon build --symlink-install --cmake-args -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=1"
 
 	// Configure tool-specific properties.
 	// "customizations": {},
 
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
+	// "remoteUser": "admin" // nvidia's idea
 }

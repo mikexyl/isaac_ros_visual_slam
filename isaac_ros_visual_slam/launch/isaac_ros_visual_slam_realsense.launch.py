@@ -25,7 +25,7 @@ from launch.conditions import IfCondition, UnlessCondition
 
 
 def generate_launch_description():
-    bag_file=DeclareLaunchArgument(
+    bag_file = DeclareLaunchArgument(
         "bag_file",
         default_value="/datasets/debug/isaac_vslam/office_short_d455",
         description="Path to bag file",
@@ -45,7 +45,7 @@ def generate_launch_description():
 
     """Launch file which brings up visual slam node configured for RealSense."""
     realsense_camera_node = Node(
-        condition=UnlessCondition(LaunchConfiguration('play')),
+        condition=UnlessCondition(LaunchConfiguration("play")),
         name="camera",
         namespace="camera",
         package="realsense2_camera",
@@ -125,8 +125,7 @@ def generate_launch_description():
             "camera/infra2/camera_info",
             "camera/imu",
             "/tf",
-            "/tf_static"
-            # ... [add any other topics you wish to record]
+            "/tf_static",
         ],
         shell=True,
     )
@@ -139,10 +138,11 @@ def generate_launch_description():
             "play",
             LaunchConfiguration("bag_file"),
             "--clock",
-        ],       
+            "-r",
+            "0.1",
+        ],
         shell=True,
     )
-
 
     return launch.LaunchDescription(
         [
@@ -152,6 +152,6 @@ def generate_launch_description():
             visual_slam_launch_container,
             realsense_camera_node,
             record_rosbag,
-            play_rosbag
+            play_rosbag,
         ]
     )

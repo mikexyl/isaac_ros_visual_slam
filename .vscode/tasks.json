@@ -4,14 +4,9 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "echo",
-      "type": "shell",
-      "command": "echo Hello"
-    },
-    {
       "label": "build",
       "type": "shell",
-      "command": "cd /workspaces && source /opt/ros/humble/setup.bash && colcon build --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=1",
+      "command": "cd /workspaces && source /opt/ros/humble/setup.bash && colcon build --symlink-install --cmake-args -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=1",
       "group": {
         "kind": "build",
         "isDefault": true
