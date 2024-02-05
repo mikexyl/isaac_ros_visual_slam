@@ -129,7 +129,20 @@ def launch_setup(context, *args, **kwargs):
         }.items(),
     )
 
-    return [visual_slam_launch_container, play_rosbag, tf_launch, decompress_node_infra1, decompress_node_infra2]
+    record_rosbag = ExecuteProcess(
+        condition=IfCondition(LaunchConfiguration("record")),
+        cmd=[
+            "ros2",
+            "bag",
+            "record",
+            "-a",
+            "-x", "\"/.*(image|points).*\""
+        ],
+        shell=True,
+    )
+
+
+    return [visual_slam_launch_container, play_rosbag, tf_launch, decompress_node_infra1, decompress_node_infra2, record_rosbag]
 
 def generate_launch_description():
     robot_id = DeclareLaunchArgument( "robot_id", default_value="", description="Robot ID",)
@@ -141,6 +154,7 @@ def generate_launch_description():
     play_arg = DeclareLaunchArgument( "play", default_value="true", description="Enable playing of topics with rosbag",)
     base_link=DeclareLaunchArgument("base_link", default_value="camera_link", description="Base Link")
     imu_frame=DeclareLaunchArgument("imu_frame", default_value="acl_jackal2/forward_gyro_optical_frame", description="IMU Frame")
+    record_arg=DeclareLaunchArgument("record", default_value="false", description="Enable recording of topics with rosbag")
 
     return launch.LaunchDescription(
         [
@@ -153,6 +167,7 @@ def generate_launch_description():
             play_arg,
             base_link,
             imu_frame,
+            record_arg,
             OpaqueFunction(function=launch_setup),
         ]
     )

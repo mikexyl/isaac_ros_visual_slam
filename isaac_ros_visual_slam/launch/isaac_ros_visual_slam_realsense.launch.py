@@ -91,6 +91,7 @@ def generate_launch_description():
                 "accel_random_walk": 0.003,
                 "calibration_frequency": 200.0,
                 "img_jitter_threshold_ms": 22.00,
+                "enable_localization_n_mapping": True,
             }
         ],
         remappings=[
