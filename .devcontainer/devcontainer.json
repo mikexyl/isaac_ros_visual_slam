@@ -16,7 +16,8 @@
 		"vscode": {
 			"extensions": [
 				"llvm-vs-code-extensions.vscode-clangd",
-				"ms-python.black-formatter"
+				"ms-python.black-formatter",
+				"ms-python.isort"
 			]
 		}
 	},

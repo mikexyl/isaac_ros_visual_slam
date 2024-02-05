@@ -10,5 +10,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     llvm clang && \
     rm -rf /var/lib/apt/lists/*
 
+# Upgrade to get latest realsense package that includes d455 etc.
+RUN apt update && apt upgrade -y && rm -rf /var/lib/apt/lists/*
+
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["bash"]
